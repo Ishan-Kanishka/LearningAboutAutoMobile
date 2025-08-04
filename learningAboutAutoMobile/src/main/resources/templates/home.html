@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning About Auto Mobile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .nav {
+            margin-bottom: 20px;
+        }
+        .nav a {
+            color: #333;
+            text-decoration: none;
+            margin-right: 20px;
+            padding: 10px 15px;
+            background-color: #ddd;
+            border-radius: 5px;
+        }
+        .nav a:hover {
+            background-color: #ccc;
+        }
+        .content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        .videos-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .top-users-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .video-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+        .video-item h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .video-item a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .video-item a:hover {
+            text-decoration: underline;
+        }
+        .user-badge {
+            background-color: #ffd700;
+            color: #333;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .user-badge:nth-child(1) {
+            background-color: #ffd700;
+        }
+        .user-badge:nth-child(2) {
+            background-color: #c0c0c0;
+        }
+        .user-badge:nth-child(3) {
+            background-color: #cd7f32;
+        }
+        .flash-message {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .flash-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .flash-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Welcome to the Auto Mobile Learning Site!</h1>
+        <p>Discover amazing automotive videos and track your learning progress.</p>
+    </div>
+
+    <!-- Flash Messages -->
+    <div th:if="${success}" class="flash-message success" th:text="${success}"></div>
+    <div th:if="${error}" class="flash-message error" th:text="${error}"></div>
+
+    <!-- Navigation -->
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/videos">All Videos</a>
+        <a th:if="${currentUser == null}" href="/login">Login</a>
+        <a th:if="${currentUser == null}" href="/register">Register</a>
+        <a th:if="${currentUser != null}" href="/logout">Logout</a>
+        <a th:if="${currentUser != null and currentUser.isAdmin}" href="/admin/add-video">Admin Panel</a>
+        <span th:if="${currentUser != null}" style="float: right; padding: 10px;">
+            Welcome, <strong th:text="${currentUser.username}"></strong>!
+        </span>
+    </div>
+
+    <div class="content">
+        <!-- Videos Section -->
+        <div class="videos-section">
+            <h2>Featured Videos</h2>
+            <div th:if="${videos.empty}">
+                <p>No videos available yet. Check back soon!</p>
+            </div>
+            <div th:each="video : ${videos}" class="video-item">
+                <h3 th:text="${video.title}"></h3>
+                <p th:text="${video.description}"></p>
+                <a th:href="@{'/videos/' + ${video.id}}">Watch Video</a>
+            </div>
+        </div>
+
+        <!-- Top Users Section -->
+        <div class="top-users-section">
+            <h2>🏆 Top Users</h2>
+            <div th:if="${topUsers.empty}">
+                <p>No user activity yet. Start watching videos to earn badges!</p>
+            </div>
+            <div th:each="user, stat : ${topUsers}" class="user-badge">
+                <span th:text="${stat.count}"></span>️⃣ 
+                <strong th:text="${user.username}"></strong>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

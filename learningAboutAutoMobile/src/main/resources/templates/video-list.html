@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Videos - Learning About Auto Mobile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .nav {
+            margin-bottom: 20px;
+        }
+        .nav a {
+            color: #333;
+            text-decoration: none;
+            margin-right: 20px;
+            padding: 10px 15px;
+            background-color: #ddd;
+            border-radius: 5px;
+        }
+        .nav a:hover {
+            background-color: #ccc;
+        }
+        .videos-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .video-item {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background-color: #fafafa;
+            transition: transform 0.2s;
+        }
+        .video-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .video-item h3 {
+            margin-top: 0;
+            color: #333;
+            font-size: 1.4em;
+        }
+        .video-item p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .video-item a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .video-item a:hover {
+            background-color: #0056b3;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>All Videos</h1>
+        <p>Browse our complete collection of automotive learning videos</p>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/videos">All Videos</a>
+        <a th:if="${currentUser == null}" href="/login">Login</a>
+        <a th:if="${currentUser == null}" href="/register">Register</a>
+        <a th:if="${currentUser != null}" href="/logout">Logout</a>
+        <a th:if="${currentUser != null and currentUser.isAdmin}" href="/admin/add-video">Admin Panel</a>
+    </div>
+
+    <div class="videos-container">
+        <h2>Video Collection</h2>
+        
+        <div th:if="${videos.empty}" class="empty-state">
+            <h3>No videos available yet</h3>
+            <p>Check back soon for amazing automotive content!</p>
+        </div>
+        
+        <div th:each="video : ${videos}" class="video-item">
+            <h3 th:text="${video.title}"></h3>
+            <p th:text="${video.description}"></p>
+            <a th:href="@{'/videos/' + ${video.id}}">Watch Video</a>
+        </div>
+    </div>
+</body>
+</html> 
